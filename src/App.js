@@ -15,11 +15,8 @@ import { DeleteIcon } from '@chakra-ui/icons';
 
 function App() {
 	const title_change = useRef('');
-	const addPostItem = () => {
-		ApiService.addTask(title_change.current.value).then(function (response) {
-			console.log(response);
-		});
-	};
+	const [todo, setTodo] = useState('');
+
 	const deleteItem = id => {
 		ApiService.deleteTask(id).then(function (response) {
 			console.log(response);
@@ -35,6 +32,18 @@ function App() {
 				console.log(error);
 			});
 	}, []);
+	const addPostItem = () => {
+		ApiService.addTask(title_change.current.value).then(function (response) {
+			setTasks([
+				{
+					id: response.data.data.id,
+					title: response.data.data.title,
+					status: response.data.data.status,
+				},
+				...tasks,
+			]);
+		});
+	};
 
 	return (
 		<>
@@ -42,7 +51,7 @@ function App() {
 				<Container>
 					<Input
 						ref={title_change}
-						defaultValue={''}
+						defaultValue={todo}
 						autoFocus
 						placeholder='რაოოო ამან ?'
 						onKeyDown={e => (e.key === 'Enter' ? addPostItem() : null)}
