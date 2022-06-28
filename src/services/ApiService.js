@@ -19,4 +19,7 @@ export default {
 	addTask(str) {
 		return api.post('/tasks', { title: str, status: '0' });
 	},
+	checkedUncheckedTask(id) {
+		return api.put(`/tasks/${id}/done`);
+	},
 };
