@@ -16,31 +16,42 @@ import Toast from './helpers/toast';
 
 function App() {
 	const title_change = useRef('');
+
 	const taskUpdate = useRef('');
+
 	const deleteItem = id => {
 		ApiService.deleteTask(id).then(function (response) {
 			console.log(response);
-			getAllTasks();
+
 			Toast('success', 'Deleted Task');
 		});
 	};
+
 	const [tasks, setTasks] = useState([]);
 
 	const addPostItem = () => {
 		ApiService.addTask(title_change.current.value).then(function (response) {
-			setTasks([
-				{
-					id: response.data.data.id,
-					title: response.data.data.title,
-					status: response.data.data.status,
-				},
-				...tasks,
-			]);
-			getAllTasks();
 			title_change.current.value = '';
 			Toast('success', 'Added Task');
 		});
 	};
+
+	const checkedUncheckedTask = id => {
+		ApiService.checkedUncheckedTask(id).then(function (response) {
+			if (response.status === 200) {
+				Toast('success', 'Updated Task');
+			}
+		});
+	};
+
+	const updateTask = (id, str) => {
+		ApiService.updateTask(id, str).then(function (response) {
+			if (response.status === 200) {
+				Toast('success', 'Updated Task Title');
+			}
+		});
+	};
+
 	const getAllTasks = () => {
 		ApiService.getTasks()
 			.then(function (response) {
@@ -50,24 +61,22 @@ function App() {
 				console.log(error);
 			});
 	};
-	const checkedUncheckedTask = id => {
-		ApiService.checkedUncheckedTask(id).then(function (response) {
-			if (response.status === 200) {
-				getAllTasks();
-				Toast('success', 'Updated Task');
-			}
-		});
-	};
-	const updateTask = (id, str) => {
-		ApiService.updateTask(id, str).then(function (response) {
-			if (response.status === 200) {
-				getAllTasks();
-				Toast('success', 'Updated Task Title');
-			}
-		});
-	};
+
 	useEffect(() => {
 		getAllTasks();
+
+		window.Echo.channel('tasks').listen('TaskAdded', () => {
+			getAllTasks();
+		});
+		window.Echo.channel('tasks').listen('TaskDone', () => {
+			getAllTasks();
+		});
+		window.Echo.channel('tasks').listen('TaskUpdated', () => {
+			getAllTasks();
+		});
+		window.Echo.channel('tasks').listen('TaskDeleted', () => {
+			getAllTasks();
+		});
 	}, []);
 	return (
 		<>
