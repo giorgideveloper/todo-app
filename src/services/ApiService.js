@@ -22,4 +22,7 @@ export default {
 	checkedUncheckedTask(id) {
 		return api.put(`/tasks/${id}/done`);
 	},
+	updateTask(id, str) {
+		return api.put(`/tasks/${id}`, { title: str });
+	},
 };

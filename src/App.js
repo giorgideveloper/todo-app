@@ -16,6 +16,7 @@ import Toast from './helpers/toast';
 
 function App() {
 	const title_change = useRef('');
+	const taskUpdate = useRef('');
 	const deleteItem = id => {
 		ApiService.deleteTask(id).then(function (response) {
 			console.log(response);
@@ -57,6 +58,14 @@ function App() {
 			}
 		});
 	};
+	const updateTask = (id, str) => {
+		ApiService.updateTask(id, str).then(function (response) {
+			if (response.status === 200) {
+				getAllTasks();
+				Toast('success', 'Updated Task Title');
+			}
+		});
+	};
 	useEffect(() => {
 		getAllTasks();
 	}, []);
@@ -84,7 +93,19 @@ function App() {
 									defaultValue={task.title}
 								>
 									<EditablePreview />
-									<EditableInput />
+									<EditableInput
+										ref={taskUpdate}
+										onKeyDown={e =>
+											e.key === 'Enter'
+												? updateTask(task.id, taskUpdate.current.value)
+												: null
+										}
+										onBlur={() =>
+											task.title === taskUpdate.current.value
+												? null
+												: updateTask(task.id, taskUpdate.current.value)
+										}
+									/>
 								</Editable>
 								<DeleteIcon onClick={() => deleteItem(task.id)} />
 							</Flex>

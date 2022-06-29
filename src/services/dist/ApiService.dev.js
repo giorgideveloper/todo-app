@@ -33,6 +33,11 @@ var _default = {
   },
   checkedUncheckedTask: function checkedUncheckedTask(id) {
     return api.put("/tasks/".concat(id, "/done"));
+  },
+  updateTask: function updateTask(id, str) {
+    return api.put("/tasks/".concat(id), {
+      title: str
+    });
   }
 };
 exports["default"] = _default;
