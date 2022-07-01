@@ -25,4 +25,13 @@ export default {
 	updateTask(id, str) {
 		return api.put(`/tasks/${id}`, { title: str });
 	},
+	getActive() {
+		return api.get('/tasks?status=active');
+	},
+	getCompleted() {
+		return api.get('/tasks?status=completed');
+	},
+	clearCompleted() {
+		return api.post('/tasks/clear');
+	},
 };

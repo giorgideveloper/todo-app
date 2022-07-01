@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import { BrowserRouter } from 'react-router-dom';
 
 window.Pusher = Pusher;
 
@@ -17,7 +18,9 @@ window.Echo = new Echo({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<ChakraProvider>
-		<App />
-	</ChakraProvider>
+	<BrowserRouter>
+		<ChakraProvider>
+			<App />
+		</ChakraProvider>
+	</BrowserRouter>
 );
