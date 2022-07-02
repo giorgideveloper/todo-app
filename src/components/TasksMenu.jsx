@@ -5,16 +5,6 @@ import { Link } from 'react-router-dom';
 import toast from '../helpers/toast';
 
 function TasksMenu() {
-	// const getTasksCheckd = () => {
-	// 	ApiService.getCheckd()
-	// 		.then(function (response) {
-	// 			setChecked(response.data.data);
-	// 		})
-	// 		.catch(function (error) {
-	// 			console.log(error);
-	// 		});
-	// };
-
 	const clearTask = () => {
 		ApiService.clearCompleted().then(function (response) {
 			toast('success', 'Clear Task');

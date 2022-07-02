@@ -6,7 +6,8 @@ import TasksMenu from './components/TasksMenu';
 import { Routes, Route } from 'react-router-dom';
 import ActiveTasks from './components/ActiveTasks';
 import CompletedTasks from './components/CompletedTasks';
-import Loading from './components/Loading';
+import './App.css';
+import Context from './context';
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 							<Route path='completed' element={<CompletedTasks />} />
 						</Routes>
 						<TasksMenu />
+						<Context />
 					</Box>
 				</Container>
 			</Flex>

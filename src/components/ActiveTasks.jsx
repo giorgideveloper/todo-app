@@ -15,7 +15,7 @@ function ActiveTasks() {
 	const [active, setActive] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
+	const getAllTasks = () => {
 		ApiService.getActive()
 			.then(function (response) {
 				setActive(response.data.data);
@@ -24,11 +24,13 @@ function ActiveTasks() {
 			.catch(function (error) {
 				console.log(error);
 			});
-	}, []);
+	};
+
 	// ChekedUnchekd Task
 	const checkedUncheckedTask = id => {
 		ApiService.checkedUncheckedTask(id).then(function (response) {
 			if (response.status === 200) {
+				getAllTasks();
 				toast('success', 'Updated Task');
 			}
 		});
@@ -37,6 +39,7 @@ function ActiveTasks() {
 	const updateTask = (id, str) => {
 		ApiService.updateTask(id, str).then(function (response) {
 			if (response.status === 200) {
+				getAllTasks();
 				toast('success', 'Updated Task Title');
 			}
 		});
@@ -44,9 +47,13 @@ function ActiveTasks() {
 	// Delete Post
 	const deleteItem = id => {
 		ApiService.deleteTask(id).then(function (response) {
+			getAllTasks();
 			toast('success', 'Deleted Task');
 		});
 	};
+	useEffect(() => {
+		getAllTasks();
+	}, []);
 
 	return (
 		<>

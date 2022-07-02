@@ -16,7 +16,8 @@ function CompletedTasks() {
 	const [complete, setCompleted] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
+	// getAllTasks
+	const getAllTasks = () => {
 		ApiService.getCompleted()
 			.then(function (response) {
 				setCompleted(response.data.data);
@@ -25,11 +26,12 @@ function CompletedTasks() {
 			.catch(function (error) {
 				console.log(error);
 			});
-	}, []);
+	};
 	// ChekedUnchekd Task
 	const checkedUncheckedTask = id => {
 		ApiService.checkedUncheckedTask(id).then(function (response) {
 			if (response.status === 200) {
+				getAllTasks();
 				toast('success', 'Updated Task');
 			}
 		});
@@ -38,6 +40,8 @@ function CompletedTasks() {
 	const updateTask = (id, str) => {
 		ApiService.updateTask(id, str).then(function (response) {
 			if (response.status === 200) {
+				getAllTasks();
+
 				toast('success', 'Updated Task Title');
 			}
 		});
@@ -45,10 +49,13 @@ function CompletedTasks() {
 	// Delete Post
 	const deleteItem = id => {
 		ApiService.deleteTask(id).then(function (response) {
+			getAllTasks();
 			toast('success', 'Deleted Task');
 		});
 	};
-
+	useEffect(() => {
+		getAllTasks();
+	}, []);
 	return (
 		<>
 			{isLoading ? (
@@ -87,8 +94,6 @@ function CompletedTasks() {
 					</Flex>
 				))
 			)}
-
-			{/* <button onClick={() => onClickCheckd()}>sas</button> */}
 		</>
 	);
 }
